@@ -12,5 +12,7 @@
     "build": "tsc",
     "test": "jest"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
