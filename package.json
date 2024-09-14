@@ -1,0 +1,9 @@
+{
+  "name": "codeowners",
+  "version": "1.0.0",
+  "description": "A way to manage CODEOWNERS files programatically.",
+  "main": "index.js",
+  "author": "bri becker <bri@bckr.io>",
+  "license": "MIT",
+  "private": true
+}
