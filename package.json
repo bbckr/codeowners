@@ -2,13 +2,17 @@
   "name": "codeowners",
   "version": "1.0.0",
   "description": "A way to manage CODEOWNERS files programatically.",
-  "main": "index.js",
   "author": "bri becker <bri@bckr.io>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "lerna run build",
+    "test": "lerna run test"
+  },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "@types/eslint__js": "^8.42.3",
+    "@types/jest": "^29.5.13",
     "eslint": "^9.10.0",
     "jest": "^29.7.0",
     "lerna": "^8.1.8",
