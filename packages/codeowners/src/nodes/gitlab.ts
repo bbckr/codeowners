@@ -1,5 +1,6 @@
 import { TNode, Commentable, Ownable } from ".";
 import { parseInlineComment, parseSection } from "./util";
+import { NodeToken } from "../tokens";
 
 export class SectionNode extends TNode implements Commentable, Ownable {
   public name: string;
@@ -10,9 +11,9 @@ export class SectionNode extends TNode implements Commentable, Ownable {
 
   constructor(
     content: string,
+    optional: boolean = false,
     parent?: TNode,
     children?: TNode[],
-    optional: boolean = false,
   ) {
     super(content, parent, children);
 
@@ -38,6 +39,9 @@ export class SectionNode extends TNode implements Commentable, Ownable {
     }
     for (const owner of this.owners) {
       str += ` ${owner}`;
+    }
+    if (this.comment) {
+      str += ` ${NodeToken.Comment}${this.comment}`;
     }
     return str;
   }
