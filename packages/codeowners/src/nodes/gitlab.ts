@@ -22,12 +22,13 @@ export class SectionNode extends TNode implements Commentable, Ownable {
     let idx: number;
     [this.comment, idx] = parseInlineComment(content);
 
-    let section = content;
+    let subcontent = content;
     if (idx !== -1) {
-      section = section.substring(0, idx);
+      subcontent = subcontent.substring(0, idx);
     }
 
-    [section, ...this.owners] = section.split(" ");
+    let section: string;
+    [section, ...this.owners] = subcontent.split(" ");
 
     [this.name, this.count] = parseSection(section);
   }

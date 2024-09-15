@@ -7,6 +7,11 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    rules: {
+      "no-useless-escape": "off",
+    },
+  },
+  {
     ignores: ["**/jest.config.*"],
   },
 );

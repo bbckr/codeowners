@@ -1,4 +1,5 @@
 import { NodeToken, CommentNodeTokenRegexp } from "../tokens";
+import { parseInlineComment } from "./util";
 
 export abstract class TNode {
   protected _parent: TNode | undefined;
@@ -44,12 +45,15 @@ export class PathNode extends TNode implements Commentable, Ownable {
   constructor(content: string, parent?: TNode, children?: TNode[]) {
     super(content, parent, children);
 
-    const [entry, comment] = content.substring(
-      content.indexOf(` ${NodeToken.Comment}`) + 1,
-    );
-    this.comment = comment;
+    let idx: number;
+    [this.comment, idx] = parseInlineComment(content);
+    
+    let subcontent = content;
+    if (idx !== -1) {
+        subcontent = subcontent.substring(0, idx);
+    }
 
-    const [path, ...owners] = entry.split(" ");
+    const [path, ...owners] = subcontent.split(" ");
     this.path = path;
     this.owners = owners;
   }
