@@ -53,13 +53,16 @@ export class PathNode extends TNode implements Commentable, Ownable {
         subcontent = subcontent.substring(0, idx);
     }
 
-    const [path, ...owners] = subcontent.split(" ");
+    const [path, ...owners] = subcontent.trim().split(/\s+/);
     this.path = path;
     this.owners = owners;
   }
 
   public toString(): string {
-    let str = `${this.path} ${this.owners.join(" ")}`;
+    let str = this.path;
+    for (const owner of this.owners) {
+      str += ` ${owner}`;
+    }
     if (this.comment) {
       str += ` ${NodeToken.Comment}${this.comment}`;
     }
@@ -68,12 +71,6 @@ export class PathNode extends TNode implements Commentable, Ownable {
 }
 
 export class NewlineNode extends TNode {
-  public toString(): string {
-    return NodeToken.Newline;
-  }
-}
-
-export class RawNode extends TNode {
   public toString(): string {
     return this._content;
   }
