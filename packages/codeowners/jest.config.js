@@ -1,4 +1,4 @@
-import root from "../../jest.config.js";
-export default {
+const root = require("../../jest.config.js");
+module.exports = {
   ...root,
 };
