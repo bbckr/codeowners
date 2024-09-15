@@ -53,7 +53,8 @@ export class PathNode extends TNode implements Commentable, Ownable {
         subcontent = subcontent.substring(0, idx);
     }
 
-    const [path, ...owners] = subcontent.trim().split(/\s+/);
+    // split on whitespace, but not escaped whitespace in case in path
+    const [path, ...owners] = subcontent.trim().split(/(?<!\\)\s+/);
     this.path = path;
     this.owners = owners;
   }

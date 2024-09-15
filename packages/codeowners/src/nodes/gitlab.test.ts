@@ -22,13 +22,13 @@ describe("SectionNode", () => {
   });
 
   it("should parse section name with owners", () => {
-    const section = new SectionNode("[section] owner1 @owner2");
-    expect(section.name).toBe("section");
+    const section = new SectionNode("[section name] owner1 @owner2");
+    expect(section.name).toBe("section name");
     expect(section.count).toBeUndefined();
     expect(section.optional).toBe(false);
     expect(section.owners).toEqual(["owner1", "@owner2"]);
     expect(section.comment).toBeUndefined();
-    expect(section.toString()).toBe("[section] owner1 @owner2");
+    expect(section.toString()).toBe("[section name] owner1 @owner2");
   });
 
   it("should parse section name with count and owners", () => {

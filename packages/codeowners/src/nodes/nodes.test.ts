@@ -36,6 +36,14 @@ describe("EntryNode", () => {
     expect(entry.comment).toBeUndefined();
     expect(entry.toString()).toBe("/some/path owner1 @owner2");
   });
+
+  it("should parse path with escaped whitespace", () => {
+    const entry = new PathNode("/some/path\\ with\\ whitespace owner1 @owner2");
+    expect(entry.path).toBe("/some/path\\ with\\ whitespace");
+    expect(entry.owners).toEqual(["owner1", "@owner2"]);
+    expect(entry.comment).toBeUndefined();
+    expect(entry.toString()).toBe("/some/path\\ with\\ whitespace owner1 @owner2");
+  });
 });
 
 describe("NewlineNode", () => {
