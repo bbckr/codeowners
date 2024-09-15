@@ -19,17 +19,21 @@ export class SectionNode extends TNode implements Commentable, Ownable {
 
     this.optional = optional;
 
-    let idx: number;
-    [this.comment, idx] = parseInlineComment(content);
+    let cIdx: number;
+    [this.comment, cIdx] = parseInlineComment(content);
 
     let subcontent = content;
-    if (idx !== -1) {
-      subcontent = subcontent.substring(0, idx);
+    if (cIdx !== -1) {
+      subcontent = subcontent.substring(0, cIdx);
     }
 
-    let section: string;
-    [section, ...this.owners] = subcontent.split(" ");
-
+    const sIdx = subcontent.lastIndexOf("]");
+    const section = subcontent.substring(0, sIdx + 1);
+    const owners = subcontent.substring(sIdx + 1).trim();
+    if (owners !== "") {
+      this.owners = owners.split(/\s+/);
+    }
+    
     [this.name, this.count] = parseSection(section);
   }
 
