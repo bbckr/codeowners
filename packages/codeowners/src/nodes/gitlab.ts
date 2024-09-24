@@ -33,7 +33,7 @@ export class SectionNode extends TNode implements Commentable, Ownable {
     if (owners !== "") {
       this.owners = owners.split(/\s+/);
     }
-    
+
     [this.name, this.count] = parseSection(section);
   }
 
@@ -47,6 +47,10 @@ export class SectionNode extends TNode implements Commentable, Ownable {
     }
     if (this.comment) {
       str += ` ${NodeToken.Comment}${this.comment}`;
+    }
+
+    for (const child of this.children) {
+      str += `\n${child.toString()}`;
     }
     return str;
   }

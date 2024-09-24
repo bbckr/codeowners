@@ -1,4 +1,4 @@
-import { PathNode, NewlineNode, CommentNode } from "./nodes";
+import { PathNode, RawNode, CommentNode } from "./nodes";
 
 describe("EntryNode", () => {
   it("should parse entry", () => {
@@ -42,13 +42,15 @@ describe("EntryNode", () => {
     expect(entry.path).toBe("/some/path\\ with\\ whitespace");
     expect(entry.owners).toEqual(["owner1", "@owner2"]);
     expect(entry.comment).toBeUndefined();
-    expect(entry.toString()).toBe("/some/path\\ with\\ whitespace owner1 @owner2");
+    expect(entry.toString()).toBe(
+      "/some/path\\ with\\ whitespace owner1 @owner2",
+    );
   });
 });
 
-describe("NewlineNode", () => {
+describe("RawNode", () => {
   it("should parse newline", () => {
-    const newline = new NewlineNode("    \n");
+    const newline = new RawNode("    \n");
     expect(newline.toString()).toBe("    \n");
   });
 });

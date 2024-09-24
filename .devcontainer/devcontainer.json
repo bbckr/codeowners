@@ -17,9 +17,7 @@
   // Configure tool-specific properties.
   "customizations": {
     "vscode": {
-      "extensions": [
-        "Orta.vscode-jest"
-      ]
+      "extensions": ["Orta.vscode-jest"]
     }
   }
 

@@ -2,14 +2,14 @@ import { NodeToken, CommentNodeTokenRegexp } from "../tokens";
 import { parseInlineComment } from "./util";
 
 export abstract class TNode {
-  protected _parent: TNode | undefined;
-  protected _children: TNode[];
+  public parent: TNode | undefined;
+  public children: TNode[];
   protected _content: string;
 
   constructor(content: string, parent?: TNode, children?: TNode[]) {
     this._content = content;
-    this._parent = parent;
-    this._children = children || [];
+    this.parent = parent;
+    this.children = children || [];
   }
 
   abstract toString(): string;
@@ -47,10 +47,10 @@ export class PathNode extends TNode implements Commentable, Ownable {
 
     let idx: number;
     [this.comment, idx] = parseInlineComment(content);
-    
+
     let subcontent = content;
     if (idx !== -1) {
-        subcontent = subcontent.substring(0, idx);
+      subcontent = subcontent.substring(0, idx);
     }
 
     // split on whitespace, but not escaped whitespace in case in path
@@ -71,7 +71,7 @@ export class PathNode extends TNode implements Commentable, Ownable {
   }
 }
 
-export class NewlineNode extends TNode {
+export class RawNode extends TNode {
   public toString(): string {
     return this._content;
   }
