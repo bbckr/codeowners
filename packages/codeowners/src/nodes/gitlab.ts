@@ -1,8 +1,8 @@
-import { TNode, Commentable, Ownable } from ".";
+import { InnerNode, Commentable, Ownable, LeafNode } from ".";
 import { parseInlineComment, parseSection } from "./util";
 import { NodeToken } from "../tokens";
 
-export class SectionNode extends TNode implements Commentable, Ownable {
+export class SectionNode extends InnerNode implements Commentable, Ownable {
   public name: string;
   public count: number | undefined;
   public owners: string[] = [];
@@ -12,8 +12,8 @@ export class SectionNode extends TNode implements Commentable, Ownable {
   constructor(
     content: string,
     optional: boolean = false,
-    parent?: TNode,
-    children?: TNode[],
+    parent?: InnerNode,
+    children?: LeafNode[],
   ) {
     super(content, parent, children);
 

@@ -1,5 +1,5 @@
 import { CodeOwners, DefaultNodes, ParsingRules } from "./file";
-import { SectionNode } from "../nodes";
+import { LeafNode, SectionNode } from "../nodes";
 import { GitlabNodeToken } from "../tokens";
 
 export type GitlabNodes = DefaultNodes | SectionNode;
@@ -9,7 +9,8 @@ export class GitlabCodeOwners extends CodeOwners {
 
   protected rules: ParsingRules[] = [
     {
-      predicate: (line: string) => line.trim().startsWith(GitlabNodeToken.Section),
+      predicate: (line: string) =>
+        line.trim().startsWith(GitlabNodeToken.Section),
       callback: (line: string) => new SectionNode(line),
     },
     ...this.rules,
@@ -32,7 +33,7 @@ export class GitlabCodeOwners extends CodeOwners {
       if (node instanceof SectionNode) {
         currentSection = node;
         codeowners.nodes.push(node);
-      } else if (currentSection) {
+      } else if (currentSection && node instanceof LeafNode) {
         node.parent = currentSection;
         currentSection.children.push(node);
       } else {

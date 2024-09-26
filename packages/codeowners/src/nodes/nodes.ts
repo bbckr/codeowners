@@ -1,18 +1,31 @@
 import { NodeToken, CommentNodeTokenRegexp } from "../tokens";
 import { parseInlineComment } from "./util";
 
-export abstract class TNode {
-  public parent: TNode | undefined;
-  public children: TNode[];
+export abstract class AbstractNode {
   protected _content: string;
-
-  constructor(content: string, parent?: TNode, children?: TNode[]) {
+  constructor(content: string) {
     this._content = content;
-    this.parent = parent;
-    this.children = children || [];
   }
 
   abstract toString(): string;
+}
+
+export abstract class LeafNode extends AbstractNode {
+  public parent: InnerNode | undefined;
+
+  constructor(content: string, parent?: InnerNode) {
+    super(content);
+    this.parent = parent;
+  }
+}
+
+export abstract class InnerNode extends LeafNode {
+  public children: AbstractNode[];
+
+  constructor(content: string, parent?: InnerNode, children?: AbstractNode[]) {
+    super(content, parent);
+    this.children = children || [];
+  }
 }
 
 export interface Commentable {
@@ -23,11 +36,11 @@ export interface Ownable {
   owners: string[];
 }
 
-export class CommentNode extends TNode implements Commentable {
+export class CommentNode extends LeafNode implements Commentable {
   public comment: string;
 
-  constructor(content: string, parent?: TNode, children?: TNode[]) {
-    super(content, parent, children);
+  constructor(content: string, parent?: InnerNode) {
+    super(content, parent);
 
     this.comment = content.replace(CommentNodeTokenRegexp, "");
   }
@@ -37,13 +50,13 @@ export class CommentNode extends TNode implements Commentable {
   }
 }
 
-export class PathNode extends TNode implements Commentable, Ownable {
+export class PathNode extends LeafNode implements Commentable, Ownable {
   public path: string;
   public owners: string[];
   public comment: string | undefined;
 
-  constructor(content: string, parent?: TNode, children?: TNode[]) {
-    super(content, parent, children);
+  constructor(content: string, parent?: InnerNode) {
+    super(content, parent);
 
     let idx: number;
     [this.comment, idx] = parseInlineComment(content);
@@ -71,7 +84,7 @@ export class PathNode extends TNode implements Commentable, Ownable {
   }
 }
 
-export class RawNode extends TNode {
+export class RawNode extends LeafNode {
   public toString(): string {
     return this._content;
   }

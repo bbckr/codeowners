@@ -12,11 +12,12 @@ describe("GitlabCodeOwners", () => {
       const codeowners = GitlabCodeOwners.parse(input);
       expect(codeowners.nodes).toHaveLength(1);
       expect(codeowners.nodes[0]).toBeInstanceOf(SectionNode);
-      expect(codeowners.nodes[0].children).toHaveLength(4);
-      expect(codeowners.nodes[0].children[0]).toBeInstanceOf(CommentNode);
-      expect(codeowners.nodes[0].children[1]).toBeInstanceOf(PathNode);
-      expect(codeowners.nodes[0].children[2]).toBeInstanceOf(RawNode);
-      expect(codeowners.nodes[0].children[3]).toBeInstanceOf(PathNode);
+      const section = codeowners.nodes[0] as SectionNode;
+      expect(section.children).toHaveLength(4);
+      expect(section.children[0]).toBeInstanceOf(CommentNode);
+      expect(section.children[1]).toBeInstanceOf(PathNode);
+      expect(section.children[2]).toBeInstanceOf(RawNode);
+      expect(section.children[3]).toBeInstanceOf(PathNode);
       expect(codeowners.toString()).toEqual(input);
     });
   });
