@@ -13,11 +13,11 @@ export class CodeOwners {
 
   protected rules: ParsingRules[] = [
     {
-      predicate: (line: string) => line.startsWith(NodeToken.Comment),
+      predicate: (line: string) => line.trim().startsWith(NodeToken.Comment),
       callback: (line: string) => new CommentNode(line),
     },
     {
-      predicate: (line: string) => line === "",
+      predicate: (line: string) => line.trim() === "",
       callback: (line: string) => new RawNode(line),
     },
     // defaults to a PathNode if the above rules don't match
@@ -27,21 +27,20 @@ export class CodeOwners {
     },
   ];
 
-  public toString(): string {
-    return this.nodes.map((node) => node.toString()).join("\n");
-  }
-
   static parse(source: string): CodeOwners {
     const codeowners = new CodeOwners();
 
     const lines = source.split("\n");
     for (const line of lines) {
-      const trimmed = line.trim();
-      const rule = codeowners.rules.find((r) => r.predicate(trimmed));
+      const rule = codeowners.rules.find((r) => r.predicate(line));
       if (rule) {
         codeowners.nodes.push(rule.callback(line));
       }
     }
     return codeowners;
+  }
+
+  public toString(): string {
+    return this.nodes.map((node) => node.toString()).join("\n");
   }
 }

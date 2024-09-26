@@ -9,7 +9,7 @@ export class GitlabCodeOwners extends CodeOwners {
 
   protected rules: ParsingRules[] = [
     {
-      predicate: (line: string) => line.startsWith(GitlabNodeToken.Section),
+      predicate: (line: string) => line.trim().startsWith(GitlabNodeToken.Section),
       callback: (line: string) => new SectionNode(line),
     },
     ...this.rules,
@@ -22,8 +22,7 @@ export class GitlabCodeOwners extends CodeOwners {
 
     const lines = source.split("\n");
     for (const line of lines) {
-      const trimmed = line.trim();
-      const rule = codeowners.rules.find((r) => r.predicate(trimmed));
+      const rule = codeowners.rules.find((r) => r.predicate(line));
       if (!rule) {
         continue;
       }
