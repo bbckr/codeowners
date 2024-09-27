@@ -36,6 +36,10 @@ export interface Ownable {
   owners: string[];
 }
 
+export function isOwnable(node: any): node is Ownable {
+  return (node as Ownable).owners !== undefined;
+}
+
 export class CommentNode extends LeafNode implements Commentable {
   public comment: string;
 

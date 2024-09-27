@@ -1,0 +1,52 @@
+# In a Code Owners file, sections are named areas of the file that are analyzed separately, and always
+# enforced. Until you define a section, GitLab treats your entire Code Owners file as a single section. Adding
+# more sections changes how GitLab evaluates your Code Owners file:
+
+# - GitLab treats entries without sections, including rules defined before the first section header, as if they were another, unnamed section.
+# - Each section enforces its rules separately.
+# - Only one CODEOWNERS pattern per section is matched to a file path.
+# - In a section, GitLab uses the last pattern matching the file or directory for each section. 
+**/*.go @admin
+
+[README Owners]
+README.md @user1 @user2
+internal/README.md
+
+[README other owners]
+README.md @user3
+
+# Overrides owners from the root section
+file.go
+
+# All group members as Code Owners for a file
+file.md @group-x
+
+# All subgroup members as Code Owners for a file
+file2.md @group-x/subgroup-y
+
+# All group and subgroup members as Code Owners for a file
+file3.md @group-x @group-x/subgroup-y
+
+# When a file or directory matches multiple entries in the CODEOWNERS file, the users from last pattern
+# matching the file or directory are used. This enables you to define more specific owners for more
+# specifically defined files or directories, when you order the entries in a sensible way. 
+
+# This line would match the file terms.md
+*.md @doc-team
+
+# This line would also match the file terms.md
+terms.md @legal-team
+
+
+# If multiple file paths inside a section share the same ownership, define default Code Owners for the
+# section. All paths in that section inherit this default, unless you override the section default on a
+# specific line.
+# Default owners are applied when specific owners are not specified for file paths. Specific owners defined
+# beside the file path override default owners. 
+[Documentation][2] @docs-team
+docs/
+README.md
+
+[Database] @database-team @agarcia
+model/db/
+config/db/database-setup.md @docs-team

@@ -1,7 +1,17 @@
-import { CommentNode, PathNode, RawNode, AbstractNode } from "../nodes";
+import {
+  CommentNode,
+  PathNode,
+  RawNode,
+  AbstractNode,
+  InnerNode,
+  isOwnable,
+} from "../nodes";
 import { NodeToken } from "../tokens";
+import ignore from "ignore";
 
 export type DefaultNodes = CommentNode | PathNode | RawNode | AbstractNode;
+
+const EMPTY_ARRAY: string[] = [];
 
 export interface ParsingRules {
   predicate: (line: string) => boolean;
@@ -45,13 +55,51 @@ export class CodeOwners {
   }
 
   public getOwners(filepath: string): string[] {
-    // check if the filepath matches the glob pattern in the path node
-    // - starts from the end of the array to prioritize the last match
-    // - if the node is an inner node, check its children nodes from end to start
-    // - if the path matches, return the owners
-    // - if there are no owners, check the parent node. if the parent node
-    // - is ownable, then return the parent node owners. otherwise there are no owners
+    // codeowners priotizes the last matching pattern, so we iterate in reverse,
+    // only caring about path nodes or nodes that can contain path nodes
+    for (let i = this.nodes.length - 1; i >= 0; i--) {
+      const node = this.nodes[i];
 
-    return [];
+      // check if the path matches the glob and return the owners
+      if (node instanceof PathNode) {
+        if (match(filepath, node.path)) {
+          // check if path matches the glob
+          return [...node.owners];
+        }
+      }
+
+      // inner nodes can have children that are paths, where if the inner node
+      // is ownable, the children can inherit the owners if they don't have any
+      if (node instanceof InnerNode) {
+        const owners = isOwnable(node) ? [...node.owners] : EMPTY_ARRAY;
+        for (let j = node.children.length - 1; j >= 0; j--) {
+          const child = node.children[j];
+
+          // check if the path matches the glob and return the owners
+          if (child instanceof PathNode) {
+            if (match(filepath, child.path)) {
+              if (child.owners.length > 0) {
+                return [...child.owners];
+              }
+              // default to parent owners if no owners
+              return owners;
+            }
+          }
+        }
+      }
+    }
+
+    // if no matches, return an empty array
+    return EMPTY_ARRAY;
   }
+}
+
+function match(filepath: string, glob: string): boolean {
+  // codeowners is based on gitignore spec, and the ignore package
+  // follows the same spec. however, github codeowners mentions that
+  // it does not support negation, character ranges, and escaping a
+  // hash to treat as a pattern. we ignore these cases for now.
+  // see: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+  const ig = ignore().add(glob);
+  return ig.ignores(filepath);
 }

@@ -42,4 +42,11 @@ export class GitlabCodeOwners extends CodeOwners {
     }
     return codeowners;
   }
+
+  // bbckr: implement duplicate section names as part of getting the owners of a section
+  // per-gitlab, if multiple sections have the same name, they are "combined". also, section
+  // headings are not case-sensitive. (this only matters when a path in a lower section doesn't
+  // have an owner, and needs to default to the section owner of a matching section)
+  // see: https://docs.gitlab.com/ee/user/project/codeowners/#sections-with-duplicate-names
+  // may need to nest codeowners nodes under a root node to traverse recursively and get owners
 }

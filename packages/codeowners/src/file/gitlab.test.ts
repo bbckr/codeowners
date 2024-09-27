@@ -1,5 +1,7 @@
 import { CommentNode, PathNode, RawNode, SectionNode } from "../nodes";
 import { GitlabCodeOwners } from "./gitlab";
+import path from "path";
+import fs from "fs";
 
 describe("GitlabCodeOwners", () => {
   describe("parse", () => {
@@ -19,6 +21,37 @@ describe("GitlabCodeOwners", () => {
       expect(section.children[2]).toBeInstanceOf(RawNode);
       expect(section.children[3]).toBeInstanceOf(PathNode);
       expect(codeowners.toString()).toEqual(input);
+    });
+
+    it("should parse gitlab spec codeowners", () => {
+      const filepath = path.join(__dirname, "../../spec/gitlab/CODEOWNERS");
+      const input = fs.readFileSync(filepath, "utf8");
+      const codeowners = GitlabCodeOwners.parse(input);
+      expect(codeowners.toString()).toEqual(input);
+    });
+  });
+
+  describe("getOwners", () => {
+    it("should get owners for gitlab spec", () => {
+      const filepath = path.join(__dirname, "../../spec/gitlab/CODEOWNERS");
+      const input = fs.readFileSync(filepath, "utf8");
+      const codeowners = GitlabCodeOwners.parse(input);
+
+      expect(codeowners.getOwners("index.js")).toEqual([]);
+      expect(codeowners.getOwners("src/main.go")).toEqual(["@admin"]);
+      expect(codeowners.getOwners("file.go")).toEqual([]);
+      expect(codeowners.getOwners("README.md")).toEqual(["@docs-team"]);
+      expect(codeowners.getOwners("config/db/database-setup.md")).toEqual([
+        "@docs-team",
+      ]);
+      expect(codeowners.getOwners("model/db/")).toEqual([
+        "@database-team",
+        "@agarcia",
+      ]);
+      expect(codeowners.getOwners("terms.md")).toEqual(["@legal-team"]);
+      expect(codeowners.getOwners("internal/README.md")).toEqual([
+        "@docs-team",
+      ]);
     });
   });
 });

@@ -14,5 +14,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "ignore": "^6.0.2"
+  }
 }
