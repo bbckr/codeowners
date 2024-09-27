@@ -5,7 +5,7 @@ import { GitlabNodeToken } from "../tokens";
 export type GitlabNodes = DefaultNodes | SectionNode;
 
 export class GitlabCodeOwners extends CodeOwners {
-  public nodes: GitlabNodes[] = [];
+  protected _nodes: GitlabNodes[] = [];
 
   protected rules: ParsingRules[] = [
     {
@@ -32,15 +32,19 @@ export class GitlabCodeOwners extends CodeOwners {
 
       if (node instanceof SectionNode) {
         currentSection = node;
-        codeowners.nodes.push(node);
+        codeowners._nodes.push(node);
       } else if (currentSection && node instanceof LeafNode) {
         node.parent = currentSection;
         currentSection.children.push(node);
       } else {
-        codeowners.nodes.push(node);
+        codeowners._nodes.push(node);
       }
     }
     return codeowners;
+  }
+
+  public get nodes(): ReadonlyArray<GitlabNodes> {
+    return this._nodes;
   }
 
   // bbckr: implement duplicate section names as part of getting the owners of a section

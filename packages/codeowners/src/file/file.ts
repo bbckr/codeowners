@@ -19,7 +19,7 @@ export interface ParsingRules {
 }
 
 export class CodeOwners {
-  public nodes: DefaultNodes[] = [];
+  protected _nodes: DefaultNodes[] = [];
 
   protected rules: ParsingRules[] = [
     {
@@ -44,21 +44,25 @@ export class CodeOwners {
     for (const line of lines) {
       const rule = codeowners.rules.find((r) => r.predicate(line));
       if (rule) {
-        codeowners.nodes.push(rule.callback(line));
+        codeowners._nodes.push(rule.callback(line));
       }
     }
     return codeowners;
   }
 
+  public get nodes(): ReadonlyArray<DefaultNodes> {
+    return this._nodes;
+  }
+
   public toString(): string {
-    return this.nodes.map((node) => node.toString()).join("\n");
+    return this._nodes.map((node) => node.toString()).join("\n");
   }
 
   public getOwners(filepath: string): string[] {
     // codeowners priotizes the last matching pattern, so we iterate in reverse,
     // only caring about path nodes or nodes that can contain path nodes
-    for (let i = this.nodes.length - 1; i >= 0; i--) {
-      const node = this.nodes[i];
+    for (let i = this._nodes.length - 1; i >= 0; i--) {
+      const node = this._nodes[i];
 
       // check if the path matches the glob and return the owners
       if (node instanceof PathNode) {

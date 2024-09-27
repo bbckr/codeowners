@@ -2,7 +2,8 @@ import { NodeToken, CommentNodeTokenRegexp } from "../tokens";
 import { parseInlineComment } from "./util";
 
 export abstract class AbstractNode {
-  protected _content: string;
+  // the original content of the node when contructed
+  protected readonly _content: string;
   constructor(content: string) {
     this._content = content;
   }
