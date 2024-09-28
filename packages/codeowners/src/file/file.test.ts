@@ -20,7 +20,7 @@ describe("CodeOwners", () => {
     });
 
     it("should parse github spec codeowners", () => {
-      const filepath = path.join(__dirname, "../../spec/github/CODEOWNERS");
+      const filepath = path.join(__dirname, "../../testdata/CODEOWNERS");
       const input = fs.readFileSync(filepath, "utf8");
       const codeowners = CodeOwners.parse(input);
       expect(codeowners.toString()).toEqual(input);
@@ -29,7 +29,7 @@ describe("CodeOwners", () => {
 
   describe("getOwners", () => {
     it("should get owners for github spec", () => {
-      const filepath = path.join(__dirname, "../../spec/github/CODEOWNERS");
+      const filepath = path.join(__dirname, "../../testdata/CODEOWNERS");
       const input = fs.readFileSync(filepath, "utf8");
       const codeowners = CodeOwners.parse(input);
 
