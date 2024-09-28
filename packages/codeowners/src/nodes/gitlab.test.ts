@@ -2,7 +2,7 @@ import { SectionNode } from "./gitlab";
 
 describe("SectionNode", () => {
   it("should parse section name", () => {
-    const section = new SectionNode("[section name]");
+    const section = SectionNode.parse("[section name]");
     expect(section.name).toBe("section name");
     expect(section.count).toBeUndefined();
     expect(section.optional).toBe(false);
@@ -12,7 +12,7 @@ describe("SectionNode", () => {
   });
 
   it("should parse section name with count", () => {
-    const section = new SectionNode("[section][1]");
+    const section = SectionNode.parse("[section][1]");
     expect(section.name).toBe("section");
     expect(section.count).toBe(1);
     expect(section.optional).toBe(false);
@@ -22,7 +22,7 @@ describe("SectionNode", () => {
   });
 
   it("should parse section name with owners", () => {
-    const section = new SectionNode("[section name] owner1 @owner2");
+    const section = SectionNode.parse("[section name] owner1 @owner2");
     expect(section.name).toBe("section name");
     expect(section.count).toBeUndefined();
     expect(section.optional).toBe(false);
@@ -32,7 +32,7 @@ describe("SectionNode", () => {
   });
 
   it("should parse section name with count and owners", () => {
-    const section = new SectionNode("[section][1] owner1 @owner2");
+    const section = SectionNode.parse("[section][1] owner1 @owner2");
     expect(section.name).toBe("section");
     expect(section.count).toBe(1);
     expect(section.optional).toBe(false);
@@ -42,7 +42,7 @@ describe("SectionNode", () => {
   });
 
   it("should parse section name with count and owners and comment", () => {
-    const section = new SectionNode(
+    const section = SectionNode.parse(
       "[section][10] owner1 @owner2 # comment # still part of comment",
     );
     expect(section.name).toBe("section");
@@ -56,7 +56,7 @@ describe("SectionNode", () => {
   });
 
   it("should parse optional section", () => {
-    const section = new SectionNode("^[section]", true);
+    const section = SectionNode.parse("^[section]", true);
     expect(section.name).toBe("section");
     expect(section.count).toBeUndefined();
     expect(section.optional).toBe(true);

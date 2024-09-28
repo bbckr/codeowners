@@ -11,7 +11,12 @@ export class GitlabCodeOwners extends CodeOwners {
     {
       predicate: (line: string) =>
         line.trim().startsWith(GitlabNodeToken.Section),
-      callback: (line: string) => new SectionNode(line),
+      callback: (line: string) => SectionNode.parse(line),
+    },
+    {
+      predicate: (line: string) =>
+        line.trim().startsWith(GitlabNodeToken.OptionalSection),
+      callback: (line: string) => SectionNode.parse(line, true),
     },
     ...this.rules,
   ];

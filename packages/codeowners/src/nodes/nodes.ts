@@ -2,20 +2,14 @@ import { NodeToken, CommentNodeTokenRegexp } from "../tokens";
 import { parseInlineComment } from "./util";
 
 export abstract class AbstractNode {
-  // the original content of the node when contructed
-  protected readonly _content: string;
-  constructor(content: string) {
-    this._content = content;
-  }
-
   abstract toString(): string;
 }
 
 export abstract class LeafNode extends AbstractNode {
   public parent: InnerNode | undefined;
 
-  constructor(content: string, parent?: InnerNode) {
-    super(content);
+  constructor(parent?: InnerNode) {
+    super();
     this.parent = parent;
   }
 }
@@ -23,8 +17,8 @@ export abstract class LeafNode extends AbstractNode {
 export abstract class InnerNode extends LeafNode {
   public children: AbstractNode[];
 
-  constructor(content: string, parent?: InnerNode, children?: AbstractNode[]) {
-    super(content, parent);
+  constructor(parent?: InnerNode, children?: AbstractNode[]) {
+    super(parent);
     this.children = children || [];
   }
 }
@@ -44,10 +38,15 @@ export function isOwnable(node: any): node is Ownable {
 export class CommentNode extends LeafNode implements Commentable {
   public comment: string;
 
-  constructor(content: string, parent?: InnerNode) {
-    super(content, parent);
+  constructor(comment: string, parent?: InnerNode) {
+    super(parent);
 
-    this.comment = content.replace(CommentNodeTokenRegexp, "");
+    this.comment = comment;
+  }
+
+  static parse(content: string): CommentNode {
+    const comment = content.replace(CommentNodeTokenRegexp, "");
+    return new CommentNode(comment);
   }
 
   public toString(): string {
@@ -60,11 +59,20 @@ export class PathNode extends LeafNode implements Commentable, Ownable {
   public owners: string[];
   public comment: string | undefined;
 
-  constructor(content: string, parent?: InnerNode) {
-    super(content, parent);
+  constructor(
+    path: string,
+    owners: string[],
+    comment?: string,
+    parent?: InnerNode,
+  ) {
+    super(parent);
+    this.path = path;
+    this.owners = owners;
+    this.comment = comment;
+  }
 
-    let idx: number;
-    [this.comment, idx] = parseInlineComment(content);
+  static parse(content: string): PathNode {
+    const [comment, idx] = parseInlineComment(content);
 
     let subcontent = content;
     if (idx !== -1) {
@@ -73,8 +81,7 @@ export class PathNode extends LeafNode implements Commentable, Ownable {
 
     // split on whitespace, but not escaped whitespace in case in path
     const [path, ...owners] = subcontent.trim().split(/(?<!\\)\s+/);
-    this.path = path;
-    this.owners = owners;
+    return new PathNode(path, owners, comment);
   }
 
   public toString(): string {
@@ -90,7 +97,14 @@ export class PathNode extends LeafNode implements Commentable, Ownable {
 }
 
 export class RawNode extends LeafNode {
+  public value: string;
+
+  constructor(value: string, parent?: InnerNode) {
+    super(parent);
+    this.value = value;
+  }
+
   public toString(): string {
-    return this._content;
+    return this.value;
   }
 }

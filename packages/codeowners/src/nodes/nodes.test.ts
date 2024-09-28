@@ -2,7 +2,7 @@ import { PathNode, RawNode, CommentNode } from "./nodes";
 
 describe("EntryNode", () => {
   it("should parse entry", () => {
-    const entry = new PathNode("/some/path owner1 @owner2");
+    const entry = PathNode.parse("/some/path owner1 @owner2");
     expect(entry.path).toBe("/some/path");
     expect(entry.owners).toEqual(["owner1", "@owner2"]);
     expect(entry.comment).toBeUndefined();
@@ -10,7 +10,7 @@ describe("EntryNode", () => {
   });
 
   it("should parse entry with comment", () => {
-    const entry = new PathNode(
+    const entry = PathNode.parse(
       "\\#path/with/hash owner1 @owner2 # comment # same comment",
     );
     expect(entry.path).toBe("\\#path/with/hash");
@@ -22,7 +22,7 @@ describe("EntryNode", () => {
   });
 
   it("should parse path with no owners", () => {
-    const entry = new PathNode("/some/path");
+    const entry = PathNode.parse("/some/path");
     expect(entry.path).toBe("/some/path");
     expect(entry.owners).toEqual([]);
     expect(entry.comment).toBeUndefined();
@@ -30,7 +30,7 @@ describe("EntryNode", () => {
   });
 
   it("should parse path with formatted whitespace", () => {
-    const entry = new PathNode("/some/path       owner1 @owner2 ");
+    const entry = PathNode.parse("/some/path       owner1 @owner2 ");
     expect(entry.path).toBe("/some/path");
     expect(entry.owners).toEqual(["owner1", "@owner2"]);
     expect(entry.comment).toBeUndefined();
@@ -38,7 +38,9 @@ describe("EntryNode", () => {
   });
 
   it("should parse path with escaped whitespace", () => {
-    const entry = new PathNode("/some/path\\ with\\ whitespace owner1 @owner2");
+    const entry = PathNode.parse(
+      "/some/path\\ with\\ whitespace owner1 @owner2",
+    );
     expect(entry.path).toBe("/some/path\\ with\\ whitespace");
     expect(entry.owners).toEqual(["owner1", "@owner2"]);
     expect(entry.comment).toBeUndefined();
@@ -57,7 +59,7 @@ describe("RawNode", () => {
 
 describe("CommentNode", () => {
   it("should parse comment", () => {
-    const comment = new CommentNode("# comment");
+    const comment = CommentNode.parse("# comment");
     expect(comment.comment).toBe(" comment");
     expect(comment.toString()).toBe("# comment");
   });

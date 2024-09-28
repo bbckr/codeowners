@@ -24,7 +24,7 @@ export class CodeOwners {
   protected rules: ParsingRules[] = [
     {
       predicate: (line: string) => line.trim().startsWith(NodeToken.Comment),
-      callback: (line: string) => new CommentNode(line),
+      callback: (line: string) => CommentNode.parse(line),
     },
     {
       predicate: (line: string) => line.trim() === "",
@@ -33,7 +33,7 @@ export class CodeOwners {
     // defaults to a PathNode if the above rules don't match
     {
       predicate: (line: string) => true,
-      callback: (line: string) => new PathNode(line),
+      callback: (line: string) => PathNode.parse(line),
     },
   ];
 

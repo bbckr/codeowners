@@ -4,23 +4,30 @@ import { NodeToken } from "../tokens";
 
 export class SectionNode extends InnerNode implements Commentable, Ownable {
   public name: string;
-  public count: number | undefined;
-  public owners: string[] = [];
-  public comment: string | undefined;
   public optional: boolean;
+  public owners: string[];
+  public count: number | undefined;
+  public comment: string | undefined;
 
   constructor(
-    content: string,
+    name: string,
     optional: boolean = false,
+    owners: string[] = [],
+    count?: number | undefined,
+    comment?: string | undefined,
     parent?: InnerNode,
     children?: LeafNode[],
   ) {
-    super(content, parent, children);
-
+    super(parent, children);
+    this.name = name;
     this.optional = optional;
+    this.owners = owners;
+    this.count = count;
+    this.comment = comment;
+  }
 
-    let cIdx: number;
-    [this.comment, cIdx] = parseInlineComment(content);
+  static parse(content: string, optional: boolean = false): SectionNode {
+    const [comment, cIdx] = parseInlineComment(content);
 
     let subcontent = content;
     if (cIdx !== -1) {
@@ -29,12 +36,14 @@ export class SectionNode extends InnerNode implements Commentable, Ownable {
 
     const sIdx = subcontent.lastIndexOf("]");
     const section = subcontent.substring(0, sIdx + 1);
-    const owners = subcontent.substring(sIdx + 1).trim();
-    if (owners !== "") {
-      this.owners = owners.split(/\s+/);
+    const ownersStr = subcontent.substring(sIdx + 1).trim();
+    let owners: string[] = [];
+    if (ownersStr !== "") {
+      owners = ownersStr.split(/\s+/);
     }
 
-    [this.name, this.count] = parseSection(section);
+    const [name, count] = parseSection(section);
+    return new SectionNode(name, optional, owners, count, comment);
   }
 
   public toString(): string {
