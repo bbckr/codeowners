@@ -34,7 +34,7 @@ export class CodeOwners {
     },
     // defaults to a PathNode if the above rules don't match
     {
-      predicate: (line: string) => true,
+      predicate: () => true,
       callback: (line: string) => PathNode.parse(line),
     },
   ];
