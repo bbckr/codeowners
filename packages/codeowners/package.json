@@ -16,7 +16,7 @@
     "dist"
   ],
   "dependencies": {
-    "find-up": "^7.0.0",
+    "find-up": "5.0.0",
     "ignore": "^6.0.2"
   }
 }

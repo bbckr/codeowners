@@ -1,8 +1,10 @@
 import { findCodeOwnersPath } from "./util";
+import path from "path";
 
 describe("findCodeOwnersPath", () => {
   it("should find the CODEOWNERS file", () => {
-    const path = findCodeOwnersPath("CODEOWNERS", "../../testdata");
-    expect(path).toEqual("CODEOWNERS");
+    const testdir = path.join(__dirname, "../../testdata");
+    const codeowners = findCodeOwnersPath("CODEOWNERS", testdir);
+    expect(codeowners).toEqual(`${testdir}/CODEOWNERS`);
   });
 });

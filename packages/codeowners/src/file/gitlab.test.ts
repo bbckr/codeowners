@@ -24,7 +24,10 @@ describe("GitlabCodeOwners", () => {
     });
 
     it("should parse gitlab spec codeowners", () => {
-      const filepath = path.join(__dirname, "../../testdata/.gitlab/CODEOWNERS");
+      const filepath = path.join(
+        __dirname,
+        "../../testdata/.gitlab/CODEOWNERS",
+      );
       const input = fs.readFileSync(filepath, "utf8");
       const codeowners = GitlabCodeOwners.parse(input);
       expect(codeowners.toString()).toEqual(input);
@@ -33,7 +36,10 @@ describe("GitlabCodeOwners", () => {
 
   describe("getOwners", () => {
     it("should get owners for gitlab spec", () => {
-      const filepath = path.join(__dirname, "../../testdata/.gitlab/CODEOWNERS");
+      const filepath = path.join(
+        __dirname,
+        "../../testdata/.gitlab/CODEOWNERS",
+      );
       const input = fs.readFileSync(filepath, "utf8");
       const codeowners = GitlabCodeOwners.parse(input);
 

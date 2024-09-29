@@ -39,7 +39,7 @@ export class CodeOwners {
     },
   ];
 
-  static load(filename: string = 'CODEOWNERS', cwd?: string): CodeOwners {
+  static load(filename: string = "CODEOWNERS", cwd?: string): CodeOwners {
     const codeOwnersPath = findCodeOwnersPath(filename, cwd);
     const source = fs.readFileSync(codeOwnersPath, "utf8");
     return CodeOwners.parse(source);

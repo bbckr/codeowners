@@ -2,6 +2,9 @@
 module.exports = {
   testEnvironment: "node",
   transform: {
-    "^.+.tsx?$": ["ts-jest", {}],
+    "^.+\\.(ts|tsx)$": "ts-jest", // Handle TypeScript files
+    "^.+\\.(js|jsx|mjs)$": "babel-jest", // Handle JavaScript/ES modules with Babel
   },
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  projects: ["<rootDir>/packages/codeowners"],
 };

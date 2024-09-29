@@ -18,6 +18,7 @@ export class GitlabCodeOwners extends CodeOwners {
         line.trim().startsWith(GitlabNodeToken.OptionalSection),
       callback: (line: string) => SectionNode.parse(line, true),
     },
+    // @ts-ignore
     ...this.rules,
   ];
 
