@@ -8,6 +8,8 @@ import {
 } from "../nodes";
 import { NodeToken } from "../tokens";
 import ignore from "ignore";
+import { findCodeOwnersPath } from "./util";
+import fs from "fs";
 
 export type DefaultNodes = CommentNode | PathNode | RawNode | AbstractNode;
 
@@ -36,6 +38,12 @@ export class CodeOwners {
       callback: (line: string) => PathNode.parse(line),
     },
   ];
+
+  static load(filename: string = 'CODEOWNERS', cwd?: string): CodeOwners {
+    const codeOwnersPath = findCodeOwnersPath(filename, cwd);
+    const source = fs.readFileSync(codeOwnersPath, "utf8");
+    return CodeOwners.parse(source);
+  }
 
   static parse(source: string): CodeOwners {
     const codeowners = new CodeOwners();

@@ -1,10 +1,13 @@
 {
-  "name": "codeowners",
+  "name": "root",
   "version": "1.0.0",
   "description": "A way to manage CODEOWNERS files programatically.",
   "author": "bri becker <bri@bckr.io>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "18 || 20"
+  },
   "scripts": {
     "build": "lerna run build",
     "test": "lerna run test",
