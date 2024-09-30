@@ -1,25 +1,24 @@
-import { CodeOwners, CodeOwnersSpec } from "../codeowners";
+import { CodeOwners, CodeOwnersSpec, NodesType } from "../codeowners";
 import {
   CommentNode,
   PathNode,
   RawNode,
-  AbstractNode,
   NodeToken,
   SectionNode,
   InnerNode,
   LeafNode,
 } from "../nodes";
 
-interface ParsingRule {
+interface ParsingRule<T> {
   predicate: (line: string) => boolean;
-  callback: (line: string) => AbstractNode;
+  callback: (line: string) => T;
 }
 
 export class CodeOwnersParser<
   T extends CodeOwnersSpec = CodeOwnersSpec.Default,
 > {
   private spec: T;
-  private rules: ParsingRule[];
+  private rules: ParsingRule<NodesType<T>>[];
 
   public constructor(spec: T = CodeOwnersSpec.Default as T) {
     this.spec = spec;
@@ -39,7 +38,7 @@ export class CodeOwnersParser<
   }
 
   public parse(source: string): CodeOwners<T> {
-    const nodes: AbstractNode[] = [];
+    const nodes: NodesType<T>[] = [];
 
     let currentParent: InnerNode | undefined;
 
@@ -74,7 +73,7 @@ export class CodeOwnersParser<
  *
  */
 
-const CommentNodeRule: ParsingRule = {
+const CommentNodeRule: ParsingRule<CommentNode> = {
   predicate: (line: string) => line.trim().startsWith(NodeToken.Comment),
   callback: (line: string) => {
     const comment = line.replace(CommentNodeTokenRegexp, "");
@@ -84,12 +83,12 @@ const CommentNodeRule: ParsingRule = {
 
 const CommentNodeTokenRegexp = new RegExp(`^${NodeToken.Comment}`);
 
-const RawNodeRule: ParsingRule = {
+const RawNodeRule: ParsingRule<RawNode> = {
   predicate: (line: string) => line.trim() === "",
   callback: (line: string) => new RawNode(line),
 };
 
-const PathNodeRule: ParsingRule = {
+const PathNodeRule: ParsingRule<PathNode> = {
   // last rule, defaults to true if other rules are not matched
   predicate: () => true,
   callback: (line: string) => {
@@ -120,12 +119,12 @@ function parseInlineComment(str: string): [string | undefined, number] {
  *
  */
 
-const SectionNodeRule: ParsingRule = {
+const SectionNodeRule: ParsingRule<SectionNode> = {
   predicate: (line: string) => line.trim().startsWith(NodeToken.Section),
   callback: (line: string) => parseSection(line),
 };
 
-const OptionalSectionNodeRule: ParsingRule = {
+const OptionalSectionNodeRule: ParsingRule<SectionNode> = {
   predicate: (line: string) =>
     line.trim().startsWith(NodeToken.OptionalSection),
   callback: (line: string) => parseSection(line, true),

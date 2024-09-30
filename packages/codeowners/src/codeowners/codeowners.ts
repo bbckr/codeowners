@@ -15,9 +15,8 @@ export enum CodeOwnersSpec {
 }
 
 // conditional type to switch between allowed node types for a given codeowners spec
-type NodesType<T extends CodeOwnersSpec> = T extends CodeOwnersSpec.Default
-  ? DefaultSpecNodes
-  : GitlabSpecNodes;
+export type NodesType<T extends CodeOwnersSpec> =
+  T extends CodeOwnersSpec.Default ? DefaultSpecNodes : GitlabSpecNodes;
 
 export type DefaultSpecNodes = CommentNode | PathNode | RawNode | AbstractNode;
 
