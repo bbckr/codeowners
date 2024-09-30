@@ -1,1 +1,3 @@
-export { CodeOwners, GitlabCodeOwners } from "./file";
+export * from "./codeowners";
+export * from "./nodes";
+export * from "./parser";

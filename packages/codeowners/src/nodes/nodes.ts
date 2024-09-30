@@ -1,3 +1,18 @@
+export enum NodeToken {
+  Newline = "\n",
+  Comment = "#",
+
+  // Gitlab Spec Node Tokens
+  Section = "[",
+  OptionalSection = "^[",
+}
+
+/**
+ *
+ * Abstract Nodes and Interfaces
+ *
+ */
+
 export abstract class AbstractNode {
   abstract toString(): string;
 }
@@ -32,6 +47,12 @@ export function isOwnable(node: any): node is Ownable {
   return (node as Ownable).owners !== undefined;
 }
 
+/**
+ *
+ * Default Spec Nodes
+ *
+ */
+
 export class CommentNode extends LeafNode implements Commentable {
   public comment: string;
 
@@ -39,11 +60,6 @@ export class CommentNode extends LeafNode implements Commentable {
     super(parent);
 
     this.comment = comment;
-  }
-
-  static parse(content: string): CommentNode {
-    const comment = content.replace(CommentNodeTokenRegexp, "");
-    return new CommentNode(comment);
   }
 
   public toString(): string {
@@ -66,19 +82,6 @@ export class PathNode extends LeafNode implements Commentable, Ownable {
     this.path = path;
     this.owners = owners;
     this.comment = comment;
-  }
-
-  static parse(content: string): PathNode {
-    const [comment, idx] = parseInlineComment(content);
-
-    let subcontent = content;
-    if (idx !== -1) {
-      subcontent = subcontent.substring(0, idx);
-    }
-
-    // split on whitespace, but not escaped whitespace in case in path
-    const [path, ...owners] = subcontent.trim().split(/(?<!\\)\s+/);
-    return new PathNode(path, owners, comment);
   }
 
   public toString(): string {
@@ -106,17 +109,51 @@ export class RawNode extends LeafNode {
   }
 }
 
-export function parseInlineComment(str: string): [string | undefined, number] {
-  const idx = str.indexOf(` ${NodeToken.Comment}`);
-  if (idx === -1) {
-    return [undefined, idx];
+/**
+ *
+ * Gitlab Spec Nodes
+ *
+ */
+
+export class SectionNode extends InnerNode implements Commentable, Ownable {
+  public name: string;
+  public optional: boolean;
+  public owners: string[];
+  public count: number | undefined;
+  public comment: string | undefined;
+
+  constructor(
+    name: string,
+    optional: boolean = false,
+    owners: string[] = [],
+    count?: number | undefined,
+    comment?: string | undefined,
+    parent?: InnerNode,
+    children?: LeafNode[],
+  ) {
+    super(parent, children);
+    this.name = name;
+    this.optional = optional;
+    this.owners = owners;
+    this.count = count;
+    this.comment = comment;
   }
-  return [str.substring(idx + 2), idx];
-}
 
-export enum NodeToken {
-  Newline = "\n",
-  Comment = "#",
-}
+  public toString(): string {
+    let str = `${this.optional ? NodeToken.OptionalSection : NodeToken.Section}${this.name}]`;
+    if (this.count) {
+      str += `[${this.count}]`;
+    }
+    for (const owner of this.owners) {
+      str += ` ${owner}`;
+    }
+    if (this.comment) {
+      str += ` ${NodeToken.Comment}${this.comment}`;
+    }
 
-const CommentNodeTokenRegexp = new RegExp(`^${NodeToken.Comment}`);
+    for (const child of this.children) {
+      str += `\n${child.toString()}`;
+    }
+    return str;
+  }
+}
