@@ -1,7 +1,5 @@
 {
-  "include": [
-    "packages/*/src",
-  ],
+  "include": ["packages/*/src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "dist-types",
@@ -18,7 +16,7 @@
     "incremental": true,
     "isolatedModules": true,
     "lib": ["ES2022"],
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": false,
     "noFallthroughCasesInSwitch": true,

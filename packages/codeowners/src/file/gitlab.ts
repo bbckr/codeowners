@@ -1,6 +1,5 @@
 import { CodeOwners, DefaultNodes, ParsingRules } from "./file";
-import { LeafNode, SectionNode } from "../nodes";
-import { GitlabNodeToken } from "../tokens";
+import { LeafNode, SectionNode, GitlabNodeToken } from "../nodes";
 
 export type GitlabNodes = DefaultNodes | SectionNode;
 

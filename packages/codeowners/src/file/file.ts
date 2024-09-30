@@ -5,11 +5,11 @@ import {
   AbstractNode,
   InnerNode,
   isOwnable,
+  NodeToken,
 } from "../nodes";
-import { NodeToken } from "../tokens";
 import ignore from "ignore";
-import { findCodeOwnersPath } from "./util";
 import fs from "fs";
+import * as findUp from "find-up";
 
 export type DefaultNodes = CommentNode | PathNode | RawNode | AbstractNode;
 
@@ -114,4 +114,25 @@ function match(filepath: string, glob: string): boolean {
   // see: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
   const ig = ignore().add(glob);
   return ig.ignores(filepath);
+}
+
+export function findCodeOwnersPath(filename: string, cwd?: string): string {
+  const options = {
+    cwd: cwd ?? process.cwd(),
+  };
+
+  const codeOwnersPaths = [
+    filename,
+    `.bitbucket/${filename}`,
+    `.github/${filename}`,
+    `.gitlab/${filename}`,
+    `docs/${filename}`,
+  ];
+
+  const codeOwnersPath = findUp.sync(codeOwnersPaths, options);
+  if (!codeOwnersPath) {
+    throw new Error(`No CODEOWNERS file found`);
+  }
+
+  return codeOwnersPath;
 }

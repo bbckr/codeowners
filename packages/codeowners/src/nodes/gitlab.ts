@@ -1,6 +1,11 @@
-import { InnerNode, Commentable, Ownable, LeafNode } from ".";
-import { parseInlineComment, parseSection } from "./util";
-import { NodeToken } from "../tokens";
+import {
+  InnerNode,
+  Commentable,
+  Ownable,
+  LeafNode,
+  parseInlineComment,
+  NodeToken,
+} from "./nodes";
 
 export class SectionNode extends InnerNode implements Commentable, Ownable {
   public name: string;
@@ -47,7 +52,7 @@ export class SectionNode extends InnerNode implements Commentable, Ownable {
   }
 
   public toString(): string {
-    let str = `${this.optional ? "^" : ""}[${this.name}]`;
+    let str = `${this.optional ? GitlabNodeToken.OptionalSection : GitlabNodeToken.Section}${this.name}]`;
     if (this.count) {
       str += `[${this.count}]`;
     }
@@ -63,4 +68,27 @@ export class SectionNode extends InnerNode implements Commentable, Ownable {
     }
     return str;
   }
+}
+
+export enum GitlabNodeToken {
+  Section = "[",
+  OptionalSection = "^[",
+}
+
+const SectionNodeTokenRegexp = new RegExp(/(\[[\w\s]+\])(\[\d+\])*/);
+
+function parseSection(str: string): [string, number | undefined] {
+  const match = str.match(SectionNodeTokenRegexp);
+  if (!match) {
+    return ["", undefined];
+  }
+
+  const [, group1, group2] = match;
+  const name = group1.replace(/\[|\]/g, "");
+  let count: number | undefined;
+  if (group2) {
+    count = parseInt(group2.replace(/\[|\]/g, ""));
+  }
+
+  return [name, count];
 }

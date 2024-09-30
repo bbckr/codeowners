@@ -1,12 +1,8 @@
 {
   "name": "@codeowners/core",
   "version": "1.0.0",
-  "main": "src/index.ts",
-  "publishConfig": {
-    "access": "public",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "scripts": {
     "build": "tsc",

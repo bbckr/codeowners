@@ -1,6 +1,3 @@
-import { NodeToken, CommentNodeTokenRegexp } from "../tokens";
-import { parseInlineComment } from "./util";
-
 export abstract class AbstractNode {
   abstract toString(): string;
 }
@@ -108,3 +105,18 @@ export class RawNode extends LeafNode {
     return this.value;
   }
 }
+
+export function parseInlineComment(str: string): [string | undefined, number] {
+  const idx = str.indexOf(` ${NodeToken.Comment}`);
+  if (idx === -1) {
+    return [undefined, idx];
+  }
+  return [str.substring(idx + 2), idx];
+}
+
+export enum NodeToken {
+  Newline = "\n",
+  Comment = "#",
+}
+
+const CommentNodeTokenRegexp = new RegExp(`^${NodeToken.Comment}`);

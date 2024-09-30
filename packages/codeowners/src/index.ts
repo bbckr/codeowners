@@ -1,1 +1,1 @@
-export * from "./file";
+export { CodeOwners, GitlabCodeOwners } from "./file";

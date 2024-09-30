@@ -1,4 +1,4 @@
-import { CodeOwners } from "./file";
+import { CodeOwners, findCodeOwnersPath } from "./file";
 import { CommentNode, PathNode, RawNode } from "../nodes";
 import path from "path";
 import fs from "fs";
@@ -56,5 +56,13 @@ describe("CodeOwners", () => {
       expect(codeowners.getOwners("src/main.go")).toEqual(["@octocat"]);
       expect(codeowners.getOwners("src/github/main.go")).toEqual(["@doctocat"]);
     });
+  });
+});
+
+describe("findCodeOwnersPath", () => {
+  it("should find the CODEOWNERS file", () => {
+    const testdir = path.join(__dirname, "../../testdata");
+    const codeowners = findCodeOwnersPath("CODEOWNERS", testdir);
+    expect(codeowners).toEqual(`${testdir}/CODEOWNERS`);
   });
 });
