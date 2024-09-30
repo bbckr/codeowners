@@ -1,6 +1,15 @@
 {
-  "name": "@codeowners/core",
-  "version": "1.0.0",
+  "name": "@bbckr/codeowners",
+  "description": "Javascript parser and stringifier for CODEOWNERS files",
+  "version": "0.0.0-semantically-released",
+  "author": "bbckr <b@bckr.io>",
+  "homepage": "https://github.com/bbckr/codeowners/tree/main/packages/codeowners",
+  "repository": "github:bbckr/codeowners",
+  "keywords": [
+    "codeowners",
+    "parser",
+    "stringifier"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -12,7 +21,6 @@
     "dist"
   ],
   "dependencies": {
-    "find-up": "5.0.0",
     "ignore": "^6.0.2"
   }
 }
