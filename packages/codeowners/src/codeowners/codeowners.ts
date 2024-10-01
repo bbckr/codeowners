@@ -4,7 +4,6 @@ import {
   RawNode,
   AbstractNode,
   InnerNode,
-  isOwnable,
   SectionNode,
 } from "../nodes";
 import ignore from "ignore";
@@ -54,35 +53,22 @@ export class CodeOwners<T extends CodeOwnersSpec = CodeOwnersSpec.Default> {
         }
       }
 
-      // inner nodes can have children that are paths, where if the inner node
-      // is ownable, the children can inherit the owners if they don't have any
+      // some inner nodes can have children that are paths. since codeowners files are
+      // only 2 levels deep at most (due to section node being the only inner node, and
+      // it only containing leaf node children), we can simply check for path nodes here
       if (node instanceof InnerNode) {
-        const owners = isOwnable(node) ? [...node.owners] : EMPTY_ARRAY;
         for (let j = node.children.length - 1; j >= 0; j--) {
           const child = node.children[j];
 
           // check if the path matches the glob and return the owners
           if (child instanceof PathNode) {
             if (match(filepath, child.path)) {
-              if (child.owners.length > 0) {
-                return [...child.owners];
-              }
-              // default to parent owners if no owners
-              return owners;
+              return child.owners;
             }
           }
         }
       }
     }
-
-    // bbckr: notes for future implementation
-    // implement duplicate section names as part of getting the owners of a section
-    // per-gitlab, if multiple sections have the same name, they are "combined". also, section
-    // headings are not case-sensitive. (this only matters when a path in a lower section doesn't
-    // have an owner, and needs to default to the section owner of a matching section)
-    // see: https://docs.gitlab.com/ee/user/project/codeowners/#sections-with-duplicate-names
-    // may need to nest codeowners nodes under a root node to traverse recursively and get owners
-    // based on per-node getOwners methods.
 
     // if no matches, return an empty array
     return EMPTY_ARRAY;

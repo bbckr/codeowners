@@ -32,6 +32,12 @@ export abstract class InnerNode extends LeafNode {
   constructor(parent?: InnerNode, children?: AbstractNode[]) {
     super(parent);
     this.children = children || [];
+
+    for (const child of this.children) {
+      if (child instanceof LeafNode) {
+        child.parent = this;
+      }
+    }
   }
 }
 
@@ -40,10 +46,11 @@ export interface Commentable {
 }
 
 export interface Ownable {
-  owners: string[];
+  get owners(): string[];
+  set owners(owners: string[]);
 }
 
-export function isOwnable(node: any): node is Ownable {
+function isOwnable(node: any): node is Ownable {
   return (node as Ownable).owners !== undefined;
 }
 
@@ -69,30 +76,41 @@ export class CommentNode extends LeafNode implements Commentable {
 
 export class PathNode extends LeafNode implements Commentable, Ownable {
   public path: string;
-  public owners: string[];
+  private _owners: string[];
   public comment: string | undefined;
 
   constructor(
     path: string,
-    owners: string[],
+    owners: string[] = [],
     comment?: string,
     parent?: InnerNode,
   ) {
     super(parent);
     this.path = path;
-    this.owners = owners;
+    this._owners = owners;
     this.comment = comment;
   }
 
   public toString(): string {
     let str = this.path;
-    for (const owner of this.owners) {
+    for (const owner of this._owners) {
       str += ` ${owner}`;
     }
     if (this.comment) {
       str += ` ${NodeToken.Comment}${this.comment}`;
     }
     return str;
+  }
+
+  public get owners(): string[] {
+    if (this._owners.length > 0) {
+      return this._owners;
+    }
+    return this.parent && isOwnable(this.parent) ? [...this.parent.owners] : [];
+  }
+
+  public set owners(owners: string[]) {
+    this._owners = owners;
   }
 }
 
