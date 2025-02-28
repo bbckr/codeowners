@@ -1,5 +1,5 @@
 {
-  "name": "@bckr/codeowners",
+  "name": "@bbckr/codeowners",
   "version": "0.0.0-semantically-released",
   "description": "A way to manage CODEOWNERS files programatically",
   "main": "dist/index.js",

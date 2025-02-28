@@ -1,6 +1,6 @@
-# @bckr/codeowners
+# @bbckr/codeowners
 
-![license](https://img.shields.io/npm/l/@bckr/codeowners) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bbckr/codeowners/build.yml?branch=main) ![Codecov](https://codecov.io/gh/bbckr/codeowners/branch/main/graph/badge.svg)
+![license](https://img.shields.io/npm/l/@bbckr/codeowners) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bbckr/codeowners/build.yml?branch=main) ![Codecov](https://codecov.io/gh/bbckr/codeowners/branch/main/graph/badge.svg)
 
 A TypeScript library for parsing and composing CODEOWNERS files.
 
@@ -14,11 +14,11 @@ A TypeScript library for parsing and composing CODEOWNERS files.
 ## Installation
 
 ```bash
-npm install @bckr/codeowners
+npm install @bbckr/codeowners
 ```
 
 ```bash
-yarn add @bckr/codeowners
+yarn add @bbckr/codeowners
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ yarn add @bckr/codeowners
 ### Parse a CODEOWNERS file
 
 ```ts
-import { CodeOwnersParser } from "@bckr/codeowners";
+import { CodeOwnersParser } from "@bbckr/codeowners";
 
 const input = `
 # comment # same comment
@@ -57,7 +57,7 @@ console.log(owners);
 ### Compose a CODEOWNERS file programatically
 
 ```ts
-import { CodeOwners, PathNode, CommentNode } from "@bckr/codeowners";
+import { CodeOwners, PathNode, CommentNode } from "@bbckr/codeowners";
 
 const codeowners = new CodeOwners([
   new PathNode("/path/to/file", ["owner1", "@owner2"]),
@@ -73,7 +73,7 @@ import {
   CodeOwnersSpec,
   PathNode,
   SectionNode,
-} from "@bckr/codeowners";
+} from "@bbckr/codeowners";
 
 const codeowners = new CodeOwners(
   [
