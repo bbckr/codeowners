@@ -24,8 +24,9 @@ yarn add @bckr/codeowners
 ## Usage
 
 ### Parse a CODEOWNERS file
+
 ```ts
-import { CodeOwnersParser } from '@bckr/codeowners';
+import { CodeOwnersParser } from "@bckr/codeowners";
 
 const input = `
 # comment # same comment
@@ -40,10 +41,10 @@ const codeowners = parser.parse(input);
 console.log(codeowners.toString());
 ```
 
-
 ### Get the owners of a file
+
 ```ts
-const owners = codeowners.getOwners('path/to/file');
+const owners = codeowners.getOwners("path/to/file");
 console.log(owners);
 
 // Output:
@@ -54,37 +55,42 @@ console.log(owners);
 ```
 
 ### Compose a CODEOWNERS file programatically
-```ts
-import { CodeOwners, PathNode, CommentNode } from '@bckr/codeowners';
 
-const codeowners = new CodeOwners(
-    [
-        new PathNode('/path/to/file', ['owner1', '@owner2']),
-        new CommentNode('# comment'),
-    ],
-);
+```ts
+import { CodeOwners, PathNode, CommentNode } from "@bckr/codeowners";
+
+const codeowners = new CodeOwners([
+  new PathNode("/path/to/file", ["owner1", "@owner2"]),
+  new CommentNode("# comment"),
+]);
 ```
 
 ### Compose a GitLab CODEOWNERS file programatically
+
 ```ts
-import { CodeOwners, CodeOwnersSpec, PathNode, SectionNode } from '@bckr/codeowners';
+import {
+  CodeOwners,
+  CodeOwnersSpec,
+  PathNode,
+  SectionNode,
+} from "@bckr/codeowners";
 
 const codeowners = new CodeOwners(
-    [
-        new PathNode('/path/to/file', ['owner1', '@owner2']),
-        new SectionNode(
-            "README Owners", // section name
-            false, // optional section
-            [], // owners
-            undefined, // count
-            undefined, // comment
-            undefined, // parent, undefined for root of file
-            [
-              new PathNode("README.md", ["@user1", "@user2"]),
-              new PathNode("internal/README.md", ["@user4"]),
-            ],
-        ),
-    ],
-    CodeOwnersSpec.Gitlab,
+  [
+    new PathNode("/path/to/file", ["owner1", "@owner2"]),
+    new SectionNode(
+      "README Owners", // section name
+      false, // optional section
+      [], // owners
+      undefined, // count
+      undefined, // comment
+      undefined, // parent, undefined for root of file
+      [
+        new PathNode("README.md", ["@user1", "@user2"]),
+        new PathNode("internal/README.md", ["@user4"]),
+      ],
+    ),
+  ],
+  CodeOwnersSpec.Gitlab,
 );
 ```
