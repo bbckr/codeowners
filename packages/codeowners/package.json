@@ -1,26 +1,27 @@
 {
-  "name": "@bbckr/codeowners",
-  "description": "Javascript parser and stringifier for CODEOWNERS files",
+  "name": "@bckr/codeowners",
   "version": "0.0.0-semantically-released",
-  "author": "bbckr <b@bckr.io>",
-  "homepage": "https://github.com/bbckr/codeowners/tree/main/packages/codeowners",
-  "repository": "github:bbckr/codeowners",
-  "keywords": [
-    "codeowners",
-    "parser",
-    "stringifier"
-  ],
+  "description": "A way to manage CODEOWNERS files programatically",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -rf dist"
   },
-  "files": [
-    "dist"
+  "keywords": [
+    "codeowners",
+    "github",
+    "gitlab",
+    "parser"
   ],
-  "dependencies": {
-    "ignore": "^6.0.2"
+  "author": "bri becker <bri@bckr.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
   }
 }

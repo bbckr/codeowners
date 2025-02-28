@@ -6,13 +6,15 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "18 || 20"
+    "node": "20 || 22"
   },
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build --no-private",
     "test": "lerna run test",
     "lint": "eslint . && prettier --check .",
-    "format": "eslint . --fix && prettier --write ."
+    "format": "eslint . --fix && prettier --write .",
+    "prepare": "yarn build",
+    "publish-packages": "lerna publish"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -4,3 +4,4 @@ dist
 packages/**/*.js
 !jest.config.js
 dist-types
+*.tsbuildinfo
