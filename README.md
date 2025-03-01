@@ -1,6 +1,6 @@
 # codeowners
 
-A way to manage CODEOWNERS files programatically.
+A way to manage CODEOWNERS files programmatically.
 
 ## Packages
 
