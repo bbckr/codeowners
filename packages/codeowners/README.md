@@ -1,6 +1,6 @@
-# @bckr/codeowners
+# @bbckr/codeowners
 
-![license](https://img.shields.io/npm/l/@bckr/codeowners) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bbckr/codeowners/build.yml?branch=main) ![Codecov](https://codecov.io/gh/bbckr/codeowners/branch/main/graph/badge.svg)
+![license](https://img.shields.io/npm/l/@bbckr/codeowners) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bbckr/codeowners/build.yml?branch=main) ![Codecov](https://codecov.io/gh/bbckr/codeowners/branch/main/graph/badge.svg)
 
 A TypeScript library for parsing and composing CODEOWNERS files.
 
@@ -14,18 +14,19 @@ A TypeScript library for parsing and composing CODEOWNERS files.
 ## Installation
 
 ```bash
-npm install @bckr/codeowners
+npm install @bbckr/codeowners
 ```
 
 ```bash
-yarn add @bckr/codeowners
+yarn add @bbckr/codeowners
 ```
 
 ## Usage
 
 ### Parse a CODEOWNERS file
+
 ```ts
-import { CodeOwnersParser } from '@bckr/codeowners';
+import { CodeOwnersParser } from "@bbckr/codeowners";
 
 const input = `
 # comment # same comment
@@ -36,55 +37,73 @@ const input = `
 
 const parser = new CodeOwnersParser();
 const codeowners = parser.parse(input);
-
-console.log(codeowners.toString());
 ```
 
-
 ### Get the owners of a file
-```ts
-const owners = codeowners.getOwners('path/to/file');
-console.log(owners);
 
-// Output:
-// [
-//   '@owner1',
-//   '@owner2',
-// ]
+```ts
+const owners = codeowners.getOwners("path/to/file");
+```
+
+#### Output
+
+```
+['@owner1', '@owner2']
 ```
 
 ### Compose a CODEOWNERS file programatically
-```ts
-import { CodeOwners, PathNode, CommentNode } from '@bckr/codeowners';
 
-const codeowners = new CodeOwners(
-    [
-        new PathNode('/path/to/file', ['owner1', '@owner2']),
-        new CommentNode('# comment'),
-    ],
-);
+```ts
+import { CodeOwners, PathNode, CommentNode } from "@bbckr/codeowners";
+
+const codeowners = new CodeOwners([
+  new PathNode("/path/to/file", ["owner1", "@owner2"]),
+  new CommentNode("# comment"),
+]);
+```
+
+#### Output
+
+```
+/path/to/file owner1 @owner2
+# comment
 ```
 
 ### Compose a GitLab CODEOWNERS file programatically
+
 ```ts
-import { CodeOwners, CodeOwnersSpec, PathNode, SectionNode } from '@bckr/codeowners';
+import {
+  CodeOwners,
+  CodeOwnersSpec,
+  PathNode,
+  SectionNode,
+} from "@bbckr/codeowners";
 
 const codeowners = new CodeOwners(
-    [
-        new PathNode('/path/to/file', ['owner1', '@owner2']),
-        new SectionNode(
-            "README Owners", // section name
-            false, // optional section
-            [], // owners
-            undefined, // count
-            undefined, // comment
-            undefined, // parent, undefined for root of file
-            [
-              new PathNode("README.md", ["@user1", "@user2"]),
-              new PathNode("internal/README.md", ["@user4"]),
-            ],
-        ),
-    ],
-    CodeOwnersSpec.Gitlab,
+  [
+    new PathNode("/path/to/file", ["owner1", "@owner2"]),
+    new SectionNode(
+      "README Owners", // section name
+      false, // optional section
+      [], // owners
+      undefined, // count
+      undefined, // comment
+      undefined, // parent, undefined for root of file
+      [
+        new PathNode("README.md", ["@user1", "@user2"]),
+        new PathNode("internal/README.md", ["@user4"]),
+      ],
+    ),
+  ],
+  CodeOwnersSpec.Gitlab,
 );
+```
+
+#### Output
+
+```
+/path/to/file owner1 @owner2
+[README Owners]
+README.md @user1 @user2
+internal/README.md @user4
 ```

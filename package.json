@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "1.0.0",
+  "version": "0.0.0-semantically-released",
   "description": "A way to manage CODEOWNERS files programatically.",
   "author": "bri becker <bri@bckr.io>",
   "license": "MIT",
@@ -11,15 +11,16 @@
   "scripts": {
     "build": "lerna run build --no-private",
     "test": "lerna run test",
+    "clean": "lerna run clean",
     "lint": "eslint . && prettier --check .",
     "format": "eslint . --fix && prettier --write .",
-    "prepare": "yarn build",
-    "publish-packages": "lerna publish"
+    "semantic-release": "lerna run semantic-release"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
     "@eslint/js": "^9.10.0",
+    "@semantic-release/changelog": "^6.0.3",
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.5.5",

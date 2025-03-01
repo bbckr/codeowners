@@ -50,7 +50,7 @@ export interface Ownable {
   set owners(owners: string[]);
 }
 
-function isOwnable(node: any): node is Ownable {
+function isOwnable(node: unknown): node is Ownable {
   return (node as Ownable).owners !== undefined;
 }
 
