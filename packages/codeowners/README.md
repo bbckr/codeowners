@@ -46,6 +46,7 @@ const owners = codeowners.getOwners("path/to/file");
 ```
 
 #### Output
+
 ```
 ['@owner1', '@owner2']
 ```
@@ -62,6 +63,7 @@ const codeowners = new CodeOwners([
 ```
 
 #### Output
+
 ```
 /path/to/file owner1 @owner2
 # comment
@@ -98,6 +100,7 @@ const codeowners = new CodeOwners(
 ```
 
 #### Output
+
 ```
 /path/to/file owner1 @owner2
 [README Owners]
