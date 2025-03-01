@@ -11,6 +11,7 @@
   "scripts": {
     "build": "lerna run build --no-private",
     "test": "lerna run test",
+    "ci:test": "jest --coverage",
     "clean": "lerna run clean",
     "lint": "eslint . && prettier --check .",
     "format": "eslint . --fix && prettier --write .",
