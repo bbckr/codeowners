@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "semantic-release": "semantic-release"
   },
   "keywords": [
     "codeowners",
