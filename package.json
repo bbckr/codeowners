@@ -14,7 +14,7 @@
     "clean": "lerna run clean",
     "lint": "eslint . && prettier --check .",
     "format": "eslint . --fix && prettier --write .",
-    "semantic-release": "lerna run semantic-release"
+    "semantic-release": "lerna run semantic-release -- --"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
