@@ -37,21 +37,17 @@ const input = `
 
 const parser = new CodeOwnersParser();
 const codeowners = parser.parse(input);
-
-console.log(codeowners.toString());
 ```
 
 ### Get the owners of a file
 
 ```ts
 const owners = codeowners.getOwners("path/to/file");
-console.log(owners);
+```
 
-// Output:
-// [
-//   '@owner1',
-//   '@owner2',
-// ]
+#### Output
+```
+['@owner1', '@owner2']
 ```
 
 ### Compose a CODEOWNERS file programatically
@@ -63,6 +59,12 @@ const codeowners = new CodeOwners([
   new PathNode("/path/to/file", ["owner1", "@owner2"]),
   new CommentNode("# comment"),
 ]);
+```
+
+#### Output
+```
+/path/to/file owner1 @owner2
+# comment
 ```
 
 ### Compose a GitLab CODEOWNERS file programatically
@@ -93,4 +95,12 @@ const codeowners = new CodeOwners(
   ],
   CodeOwnersSpec.Gitlab,
 );
+```
+
+#### Output
+```
+/path/to/file owner1 @owner2
+[README Owners]
+README.md @user1 @user2
+internal/README.md @user4
 ```
