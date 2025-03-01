@@ -14,6 +14,7 @@
     "clean": "lerna run clean",
     "lint": "eslint . && prettier --check .",
     "format": "eslint . --fix && prettier --write .",
+    "prepare": "yarn build",
     "semantic-release": "lerna run semantic-release"
   },
   "devDependencies": {
