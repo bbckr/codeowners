@@ -25,7 +25,7 @@
     "skipLibCheck": true,
     "stripInternal": true,
     "target": "ES2018",
-    "incremental": true,
+    "incremental": false,
     "esModuleInterop": true,
     "allowJs": true,
     "checkJs": false,
