@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist && rm tsconfig.tsbuildinfo",
     "semantic-release": "semantic-release"
   },
   "keywords": [
