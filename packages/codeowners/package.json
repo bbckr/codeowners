@@ -24,5 +24,8 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "ignore": "^7.0.3"
   }
 }
